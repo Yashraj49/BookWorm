@@ -10,8 +10,11 @@ import SwiftUI
 struct ContentView: View {
     
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(sortDescriptors: []) var books: FetchedResults<Book>
-
+    @FetchRequest(sortDescriptors: [
+        SortDescriptor(\.title),
+        SortDescriptor(\.author)
+    ]) var books: FetchedResults<Book>
+    
     @State private var showingAddScreen = false
     
     var body: some View {
@@ -19,12 +22,12 @@ struct ContentView: View {
             List {
                 ForEach(books) { book in
                     NavigationLink {
-                        Text(book.title ?? "Unknown Title")
+                        DetailView(book: book)
                     } label: {
                         HStack {
                             EmojiRatingView(rating: book.rating)
                                 .font(.largeTitle)
-
+                            
                             VStack(alignment: .leading) {
                                 Text(book.title ?? "Unknown Title")
                                     .font(.headline)
@@ -33,25 +36,42 @@ struct ContentView: View {
                             }
                         }
                     }
-                }
+                }.onDelete(perform: deleteBooks)
             }
-                .navigationTitle("Bookworm")
-                .toolbar{
-                    ToolbarItem(placement:.navigationBarTrailing) {
-                        Button {
-                            showingAddScreen.toggle()
-                            
-                        } label: {
-                            Label("Add Book", systemImage: "plus")
-                                
-                        }
+            .navigationTitle("Bookworm")
+            .toolbar{
+                ToolbarItem(placement:.navigationBarTrailing) {
+                    Button {
+                        showingAddScreen.toggle()
+                        
+                    } label: {
+                        Label("Add Book", systemImage: "plus")
+                        
                     }
                 }
-                .sheet(isPresented: $showingAddScreen) {
-                    AddBookView()
-                    
+                ToolbarItem(placement: .navigationBarLeading) {
+                    EditButton()
                 }
+            }
+            .sheet(isPresented: $showingAddScreen) {
+                AddBookView()
+                
+            }
         }
+    }
+    
+
+    func deleteBooks(at offsets: IndexSet) {
+        for offset in offsets {
+            // find this book in our fetch request
+            let book = books[offset]
+            
+            // delete it from the context
+            moc.delete(book)
+        }
+        
+        // save the context
+        try? moc.save()
     }
 }
 
