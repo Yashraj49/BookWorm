@@ -17,9 +17,22 @@ struct AddBookView: View {
     @State private var genre = ""
     @State private var review = ""
     
+
+    
     @Environment(\.managedObjectContext) var moc
     
     @Environment(\.dismiss) var dismiss
+    
+    var hasValidAddress : Bool {
+        if title.isEmpty || author.isEmpty || rating.description.isEmpty || review.isEmpty {
+            return false
+        }
+        
+        if title.isAllWhiteSpaces || author.isAllWhiteSpaces ||  review.isAllWhiteSpaces {
+            return false
+        }
+        return true
+    }
     
     var body: some View {
         NavigationView {
@@ -56,15 +69,26 @@ struct AddBookView: View {
                         try? moc.save()
                         dismiss()
                     }
+                    .disabled(!hasValidAddress)
                 }
             }
             .navigationTitle("Add Book")
         }
     }
+    
 }
 
 struct AddBookView_Previews: PreviewProvider {
     static var previews: some View {
         AddBookView()
+    }
+}
+
+fileprivate extension String {
+    
+    
+    var isAllWhiteSpaces : Bool {
+        guard !self.isEmpty else {return false}
+        return self.drop(while: {$0 == " "}).isEmpty
     }
 }

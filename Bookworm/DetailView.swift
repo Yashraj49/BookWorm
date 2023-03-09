@@ -10,6 +10,14 @@ import SwiftUI
 struct DetailView: View {
     let book: Book
     
+    var FormattedDate: String {
+           guard let date = book.date else { return "" }
+           let formatter = DateFormatter()
+           formatter.dateStyle = .long
+           return "Reviewed on \(formatter.string(from: date))"
+       }
+
+    
     @Environment(\.managedObjectContext) var moc
     @Environment(\.dismiss) var dismiss
     @State private var showingDeleyeAlert = false
@@ -39,6 +47,12 @@ struct DetailView: View {
 
             RatingView(rating: .constant(Int(book.rating)))
                 .font(.largeTitle)
+            
+            Spacer()
+            
+            Text(self.FormattedDate)
+                .padding()
+            
         }
         .navigationTitle(book.title ?? "Unknown Book")
         .navigationBarTitleDisplayMode(.inline)
@@ -65,6 +79,8 @@ struct DetailView: View {
         dismiss()
     }
     
+    
+    
 }
 
 struct DetailView_Previews: PreviewProvider {
@@ -77,7 +93,8 @@ struct DetailView_Previews: PreviewProvider {
         book.genre = "Fantasy"
         book.rating = 4
         book.review = "This was a great book; I really enjoyed it."
-
+       // book.date = Date.now
+        
         return NavigationView {
             DetailView(book: book)
         }
