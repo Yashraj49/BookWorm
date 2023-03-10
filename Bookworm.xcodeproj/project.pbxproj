@@ -72,13 +72,8 @@
 			isa = PBXGroup;
 			children = (
 				E53CD54829B350E000CD11A5 /* BookwormApp.swift */,
-				E53CD54A29B350E000CD11A5 /* ContentView.swift */,
-				E5D5AE1429B7594100AEA2FE /* EmojiRatingView.swift */,
-				E57CC55A29B867FD00485F29 /* DetailView.swift */,
-				E5D5AE1029B70FC400AEA2FE /* AddBookView.swift */,
-				E5D5AE1229B7442E00AEA2FE /* RatingView.swift */,
-				E53CD56529B37B7700CD11A5 /* DataController.swift */,
-				E53CD56229B379F400CD11A5 /* Bookworm.xcdatamodeld */,
+				E5DDF48529BAF7E900A1C878 /* Views */,
+				E5DDF48629BAF7F600A1C878 /* Data */,
 				E53CD55A29B3626400CD11A5 /* Concepts and Instructions */,
 				E53CD54C29B350E100CD11A5 /* Assets.xcassets */,
 				E53CD54E29B350E100CD11A5 /* Preview Content */,
@@ -103,6 +98,27 @@
 				E5A5B1C129B6482200965B69 /* TurtorialView3(Data).swift */,
 			);
 			path = "Concepts and Instructions";
+			sourceTree = "<group>";
+		};
+		E5DDF48529BAF7E900A1C878 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E53CD54A29B350E000CD11A5 /* ContentView.swift */,
+				E5D5AE1429B7594100AEA2FE /* EmojiRatingView.swift */,
+				E57CC55A29B867FD00485F29 /* DetailView.swift */,
+				E5D5AE1029B70FC400AEA2FE /* AddBookView.swift */,
+				E5D5AE1229B7442E00AEA2FE /* RatingView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E5DDF48629BAF7F600A1C878 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				E53CD56529B37B7700CD11A5 /* DataController.swift */,
+				E53CD56229B379F400CD11A5 /* Bookworm.xcdatamodeld */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

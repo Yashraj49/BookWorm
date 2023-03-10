@@ -47,6 +47,16 @@ struct RatingView: View {
     
 }
 
+extension Image {
+    static var filledStar: Image {
+        Image(systemName: "star.fill")
+            .foregroundColor(.yellow)
+            .font(.system(size: 20, weight: .regular)) as! Image
+    }
+}
+
+
+
 struct RatingView_Previews: PreviewProvider {
     static var previews: some View {
         
