@@ -40,6 +40,7 @@ struct EmojiRatingView: View {
             .scaleEffect(scale)
             .animation(.spring(response: 0.3, dampingFraction: 0.5))
             .onTapGesture {
+                
                 withAnimation {
                     scale = 1.2
                 }
