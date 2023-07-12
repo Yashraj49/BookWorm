@@ -10,78 +10,86 @@ import SwiftUI
 struct DetailView: View {
     let book: Book
     
-    var FormattedDate: String {
-           guard let date = book.date else { return "" }
-           let formatter = DateFormatter()
-           formatter.dateStyle = .long
-           return "Reviewed on \(formatter.string(from: date))"
-       }
-
+    var formattedDate: String {
+        guard let date = book.date else { return "" }
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return "Reviewed on \(formatter.string(from: date))"
+    }
     
-    @Environment(\.managedObjectContext) var moc
-    @Environment(\.dismiss) var dismiss
-    @State private var showingDeleyeAlert = false
+    @Environment(\.managedObjectContext) private var moc
+    @Environment(\.dismiss) private var dismiss
+    @State private var showingDeleteAlert = false
     
     var body: some View {
         ScrollView {
             ZStack(alignment: .bottomTrailing) {
                 Image(book.genre ?? "Fantasy")
                     .resizable()
-                    .scaledToFit()
-
+                    
+                    .cornerRadius(20) // Add corner radius here
+                
                 Text(book.genre?.uppercased() ?? "FANTASY")
                     .font(.caption)
                     .fontWeight(.black)
                     .padding(8)
                     .foregroundColor(.white)
-                    .background(.black.opacity(0.75))
+                    .background(Color.black.opacity(0.75))
                     .clipShape(Capsule())
                     .offset(x: -5, y: -5)
             }
-            Text(book.author ?? "Unknown author")
-                .font(.title)
-                .foregroundColor(.secondary)
-
-            Text(book.review ?? "No review")
-                .padding()
-
-            RatingView(rating: .constant(Int(book.rating)))
-                .font(.largeTitle)
+            .padding()
+            
+            VStack(alignment: .leading, spacing: 10) {
+                Text(book.title ?? "Unknown Book")
+                    .font(.title)
+                    .fontWeight(.bold)
+                
+                Text(book.author ?? "Unknown Author")
+                    .font(.headline)
+                    .foregroundColor(.secondary)
+                
+                Text(book.review ?? "No review")
+                    .font(.body)
+                    .padding(.bottom)
+                
+                RatingView(rating: .constant(Int(book.rating)))
+                    .font(.largeTitle)
+            }
+            .padding()
             
             Spacer()
             
-            Text(self.FormattedDate)
+            Text(formattedDate)
+                .font(.caption)
+                .foregroundColor(.secondary)
                 .padding()
             
         }
         .navigationTitle(book.title ?? "Unknown Book")
         .navigationBarTitleDisplayMode(.inline)
-        .alert("Delete Book" , isPresented: $showingDeleyeAlert) {
-            Button("Delete" , role: .destructive , action: deleteBook)
-            Button("Cancle" , role:  .cancel ) { }
-                
+        .alert("Delete Book", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive, action: deleteBook)
+            Button("Cancel", role: .cancel) { }
         } message: {
-            Text(" Are you Sure? ")
+            Text("Are you sure you want to delete this book?")
         }
-        .toolbar{
-            Button{
-                showingDeleyeAlert = true
+        .toolbar {
+            Button {
+                showingDeleteAlert = true
             } label: {
-                Label("Delete this book " , systemImage: "trash")
+                Label("Delete this book", systemImage: "trash")
             }
         }
-        }
-    
+    }
     
     func deleteBook() {
         moc.delete(book)
-        
         dismiss()
     }
-    
-    
-    
 }
+
+
 
 struct DetailView_Previews: PreviewProvider {
     static let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)

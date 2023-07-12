@@ -8,59 +8,48 @@
 import SwiftUI
 
 struct RatingView: View {
-    
-    @Binding var rating : Int
-    
-    var label = ""
-    
-    var maximumRating = 5
-    
-    var offImage : Image?
-    var onImage = Image(systemName: "star.fill")
-    
-    var offColor = Color.gray
-    var onColor = Color.yellow
+    @Binding var rating: Int
+    var label: String = ""
+    var maximumRating: Int = 5
+    var offImage: Image? = nil
+    var onImage: Image = Image(systemName: "star.fill")
+    var offColor: Color = Color.gray
+    var onColor: Color = Color.yellow
     
     var body: some View {
         HStack {
-            if label.isEmpty == false {
+            if !label.isEmpty {
                 Text(label)
             }
             
-            ForEach(1..<maximumRating + 1, id: \.self) {number in
-                image(for: number)
+            ForEach(1..<maximumRating + 1, id: \.self) { number in
+                Image(systemName: number > rating ? "star" : "star.fill")
                     .foregroundColor(number > rating ? offColor : onColor)
                     .onTapGesture {
                         rating = number
-                        
                     }
-                   
-
             }
-        }.accessibilityElement()
-            .accessibilityLabel(label)
-            .accessibilityValue(rating == 1 ? "1 star" : "\(rating) stars")
-            .accessibilityAdjustableAction { direction in
-                switch direction {
-                case .increment:
-                    if rating < maximumRating { rating += 1 }
-                case .decrement:
-                    if rating > 1 { rating -= 1 }
-                default:
-                    break
-                }
+        }
+        .accessibilityElement()
+        .accessibilityLabel(label)
+        .accessibilityValue(rating == 1 ? "1 star" : "\(rating) stars")
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment:
+                if rating < maximumRating { rating += 1 }
+            case .decrement:
+                if rating > 1 { rating -= 1 }
+            default:
+                break
             }
-    }
-    
-    func image(for number : Int) -> Image {
-        if number > rating {
-            return offImage ?? onImage
-        } else  {
-            return onImage
         }
     }
     
+    func image(for number: Int) -> Image {
+        return Image(systemName: number > rating ? "star" : "star.fill")
+    }
 }
+
 
 extension Image {
     static var filledStar: Image {
